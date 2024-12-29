@@ -1,0 +1,42 @@
+@import "../../../styles/variables.scss";
+
+.input-wrapper {
+  color: $text-color;
+  font-size: 1rem;
+  text-align: left;
+
+  label {
+    margin-bottom: 0.875rem;
+  }
+
+  .input-content {
+    width: 100%;
+    border-radius: 8px;
+    display: flex;
+
+    .icon {
+      padding: 0.75rem;
+      background-color: $primary-color;
+      min-width: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0 8px 8px 0;
+
+      img {
+        width: 100%;
+        height: 1.5rem;
+        object-fit: contain;
+      }
+    }
+
+    input {
+      border: none;
+      border-radius: 8px 0 0 8px;
+      background-color: $gray-secondary-bg;
+      font-weight: 400;
+      padding: 0.875rem 0 0.875rem 1.25rem;
+      width: 100%;
+    }
+  }
+}

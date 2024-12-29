@@ -1,5 +1,14 @@
-<app-default-login-layout title="LogIn into your account" primaryBtnText="Login now" secondaryBtnText="Signup now">
+<app-default-login-layout title="LogIn into your account" primaryBtnText="Login now" secondaryBtnText="Signup now"
+    (submit)="submit()" (navigate)="navigate()" [disabledPrimaryBtn]="!loginForm.valid">
     <form [formGroup]="loginForm">
 
+        <app-input formControlName="email" label='Email' inputName='email' placeholder='johndoe@mail.com' type='email'>
+            <img src="/assets/svg/email-icon.svg" />
+        </app-input>
+
+        <app-input formControlName="password" label='Password' inputName='password' type='password'>
+            <img src="/assets/svg/lock-icon.svg" />
+        </app-input>
+        <span>Forgot password?</span>
     </form>
 </app-default-login-layout>
