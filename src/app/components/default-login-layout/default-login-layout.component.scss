@@ -19,11 +19,15 @@ main {
     gap: 1rem;
     flex: 0.7 1 calc(100% - 360px);
     background-color: $gray-bg;
+
+    img {
+      max-width: 100%;
+    }
   }
 
   .form-section {
     display: flex;
-    flex-grow: 0.3 0 360px;
+    flex: 0.3 0 360px;
     padding: 2rem;
 
     img {
