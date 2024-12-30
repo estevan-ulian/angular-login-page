@@ -8,8 +8,8 @@ import {
 } from '@angular/forms';
 import { InputComponent } from '../../components/input/input.component';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../services/auth.service';
 
 interface ILoginForm {
   email: FormControl;
@@ -20,7 +20,7 @@ interface ILoginForm {
   selector: 'app-login',
   standalone: true,
   imports: [DefaultLoginLayoutComponent, ReactiveFormsModule, InputComponent],
-  providers: [LoginService],
+  providers: [AuthService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
@@ -29,12 +29,15 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private loginService: LoginService,
+    private authService: AuthService,
     private toastrService: ToastrService
   ) {
     this.loginForm = new FormGroup({
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [
+      email: new FormControl('estevan@uon.dev', [
+        Validators.required,
+        Validators.email,
+      ]),
+      password: new FormControl('123456', [
         Validators.required,
         Validators.minLength(6),
       ]),
@@ -42,10 +45,18 @@ export class LoginComponent {
   }
 
   submit() {
-    this.loginService
+    this.authService
       .login(this.loginForm.value.email, this.loginForm.value.password)
       .subscribe({
-        next: () => this.toastrService.success('Login bem sucedido!'),
+        next: () => {
+          this.toastrService.success(
+            'Login bem sucedido!',
+            'Você será redirecionado em instantes...'
+          );
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 2000);
+        },
         error: () => this.toastrService.error('Erro ao fazer login!'),
       });
   }

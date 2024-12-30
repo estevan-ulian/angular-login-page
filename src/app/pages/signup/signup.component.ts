@@ -8,8 +8,8 @@ import {
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { DefaultLoginLayoutComponent } from '../../components/default-login-layout/default-login-layout.component';
-import { SignupService } from '../../services/signup.service';
 import { InputComponent } from '../../components/input/input.component';
+import { AuthService } from '../../services/auth.service';
 
 interface ISignupForm {
   name: FormControl;
@@ -22,6 +22,7 @@ interface ISignupForm {
   selector: 'app-signup',
   standalone: true,
   imports: [ReactiveFormsModule, DefaultLoginLayoutComponent, InputComponent],
+  providers: [AuthService],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss',
 })
@@ -30,7 +31,7 @@ export class SignupComponent {
 
   constructor(
     private router: Router,
-    private signupService: SignupService,
+    private authService: AuthService,
     private toastrService: ToastrService
   ) {
     this.signupForm = new FormGroup({
@@ -48,15 +49,29 @@ export class SignupComponent {
   }
 
   submit() {
-    this.signupService
+    if (
+      this.signupForm.value.password !== this.signupForm.value.confirmPassword
+    ) {
+      this.toastrService.warning('As senhas não coincidem!');
+      return;
+    }
+
+    this.authService
       .signup(
         this.signupForm.value.name,
         this.signupForm.value.email,
-        this.signupForm.value.password,
-        this.signupForm.value.confirmPassword
+        this.signupForm.value.password
       )
       .subscribe({
-        next: () => this.toastrService.success('Cadastro bem sucedido!'),
+        next: () => {
+          this.toastrService.success(
+            'Cadastro bem sucedido!',
+            'Você será redirecionado em alguns segundos...'
+          );
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 3000);
+        },
         error: () => this.toastrService.error('Erro ao fazer cadastro!'),
       });
   }
